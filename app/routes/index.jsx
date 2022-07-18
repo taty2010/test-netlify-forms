@@ -1,3 +1,12 @@
+import { redirect } from "@remix-run/node";
+
+export const actions = async ({request}) => {
+  const body = await request.formData();
+  console.log(body)
+
+  return redirect("/");
+}
+
 export default function Index() {
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
