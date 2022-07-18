@@ -23,6 +23,10 @@ export default function App() {
       </head>
 
       <body>
+      <form netlify name="feedback-form" method="POST" hidden>
+        <textarea name="message" ></textarea>
+        <button type="submit">Submit</button>
+      </form>
         <Outlet />
 
         <ScrollRestoration />

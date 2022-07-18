@@ -1,11 +1,11 @@
 import { redirect } from "@remix-run/node";
 
-export const action = async ({request}) => {
-  const body = await request.formData();
-  console.log(body)
+// export const action = async ({request}) => {
+//   const body = await request.formData();
+//   console.log(body)
 
-  return redirect("/test");
-}
+//   return redirect("/test");
+// }
 
 export default function TestPage() {
   return (
