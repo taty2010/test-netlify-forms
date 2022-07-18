@@ -6,6 +6,12 @@ const NetlifyForm = ({ action, children, formName}) => {
     return (
         <form action={action} method="post">
             <input type="hidden" name="form-name" value={formName} />
+            {/* Replace with hidden style class */}
+            <p style={{display: "none"}}>
+                <label>
+                Don’t fill this out if you’re human: <input name="bot-field" />
+                </label>
+            </p>
             {children}
         </form>
     )
