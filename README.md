@@ -1,62 +1,57 @@
-# Welcome to Remix!
+## Proof of Concept with Netlify Forms + Remix
 
-- [Remix Docs](https://remix.run/docs)
-- [Netlify Functions](https://www.netlify.com/products/functions/)
+In order for us to get detection with Netlify, we are suggesting putting an html file into the public folder which will allow Netlify to detect the form and create it online there. From there, we would still need to create our form within our actual route like `routes/test.jsx` where we use our action to the HTML page but with the method `POST`. This way we are still utilizing that page. We can also still incorporate things like honeypot detection.
 
-## Netlify Setup
+### Steps
 
-1. Install the [Netlify CLI](https://www.netlify.com/products/dev/):
+1. Create a static html file in your `public` folder. In this example we put it under `public/some-form.html`.
+2. Make sure the form has the `netlify` attribute, a `name`, and a `netlify-honeypot` with the appropriate `bot-field` input.
+3. Go into your `routes` folder and create the page with the form, in our case we did this under `routes/test.jsx`. We created our form component and made sure that it included an input with the name `form-name` and the value being the same as our static form's `name` is (e.g. `some-name`).
+4. Most importantly we want our `action` to point to the same route as our static page's form and its `method` being `post`
+5. We also need to make sure to add the input with the `bot-field` as well to make sure any users logged in could be caught through the detection.
 
-```sh
-npm i -g netlify-cli
+
+```html
+<!-- Inside of public/some-form.html
+<form netlify name="some-form" method="POST" hidden netlify-honeypot="bot-field">
+  <p style="clip:rect(0 0 0 0);clip-path: inset(50%);height:1px;overflow:hidden;position:absolute;white-space:nowrap;width:1px;">
+    <label>
+    Don’t fill this out if you’re human: <input name="bot-field" />
+    </label>
+  </p>
+  <textarea name="message" ></textarea>
+  <button type="submit">Submit</button>
+</form>
 ```
 
-If you have previously installed the Netlify CLI, you should update it to the latest version:
+```jsx
+// Inside `routes/test.jsx
 
-```sh
-npm i -g netlify-cli@latest
-```
+// Custom component we wrote to abstract some logic and make it a tad more ergonomic
+const NetlifyForm = ({ action, children, formName}) => {
+    return (
+        <form action={action} method="post">
+            <input type="hidden" name="form-name" value={formName} />
+            {/* Replace with hidden style class */}
+            <p style={{display: "none"}}>
+                <label>
+                Don’t fill this out if you’re human: <input name="bot-field" />
+                </label>
+            </p>
+            {children}
+        </form>
+    )
+}
 
-2. Sign up and log in to Netlify:
-
-```sh
-netlify login
-```
-
-3. Create a new site:
-
-```sh
-netlify init
-```
-
-## Development
-
-The Remix dev server starts your app in development mode, rebuilding assets on file changes. To start the Remix dev server:
-
-```sh
-npm run dev
-```
-
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
-
-The Netlify CLI builds a production version of your Remix App Server and splits it into Netlify Functions that run locally. This includes any custom Netlify functions you've developed. The Netlify CLI runs all of this in its development mode.
-
-```sh
-netlify dev
-```
-
-Open up [http://localhost:3000](http://localhost:3000), and you should be ready to go!
-
-Note: When running the Netlify CLI, file changes will rebuild assets, but you will not see the changes to the page you are on unless you do a browser refresh of the page. Due to how the Netlify CLI builds the Remix App Server, it does not support hot module reloading.
-
-## Deployment
-
-There are two ways to deploy your app to Netlify, you can either link your app to your git repo and have it auto deploy changes to Netlify, or you can deploy your app manually. If you've followed the setup instructions already, all you need to do is run this:
-
-```sh
-# preview deployment
-netlify deploy --build
-
-# production deployment
-netlify deploy --build --prod
+export default function TestPage() {
+  return (
+    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+      <h1>Welcome to Remix</h1>
+      <NetlifyForm action="/some-form" formName="some-form">
+        <textarea name="message"  />
+        <button type="submit">Submit</button>
+      </NetlifyForm>
+    </div>
+  );
+}
 ```
