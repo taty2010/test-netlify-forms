@@ -9,7 +9,7 @@ export async function action({request}) {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: data
+        body: new URLSearchParams(data).toString()
     })
 
     return redirect("/formaction")
