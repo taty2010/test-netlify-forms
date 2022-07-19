@@ -1,27 +1,24 @@
 import { redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 
-export async function action({request}) {
-    console.log("Here we are making a request with the backend")
-    const data = await request.formData();
-    const url = new URL('/some-form', request.url);
-    console.log("The URL is: ", url.toString());
+export async function action({ request }) {
+  const data = await request.formData();
+  const url = new URL("/some-form", request.url);
 
-    try {
+  try {
     await fetch(url, {
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams(data).toString()
-    })
-    } catch (e) {
-        console.log('Error occurred: ', e.toString())
-    }
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(data).toString(),
+    });
+  } catch (e) {
+    console.log("Error occurred: ", e.toString());
+  }
 
-    return redirect("/formaction")
+  return redirect("/formaction");
 }
-
 
 export default function FormPage() {
   return (
@@ -30,12 +27,12 @@ export default function FormPage() {
       <Form action="/formaction" method="post">
         <input type="hidden" name="form-name" value="some-form" />
         {/* Replace with hidden style class */}
-        <p style={{display: "none"}}>
-            <label>
+        <p style={{ display: "none" }}>
+          <label>
             Don’t fill this out if you’re human: <input name="bot-field" />
-            </label>
+          </label>
         </p>
-        <textarea name="message"  />
+        <textarea name="message" />
         <button type="submit">Submit</button>
       </Form>
     </div>
