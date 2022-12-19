@@ -2,10 +2,10 @@ import { redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import * as React from "react";
 
-const NetlifyForm = ({children, formName}) => {
+const NetlifyForm = ({children, formName, action}) => {
     return (
-        <form method="post" value={formName} data-netlify netlify-honeypot="bot-field">
-            <input type="hidden" name="form-name" />
+        <form action={action} method="post"  data-netlify netlify-honeypot="bot-field">
+            <input type="hidden" name="form-name" value={formName}/>
             {/* Replace with hidden style class */}
             <p style={{display: "none"}}>
                 <label>
@@ -17,28 +17,32 @@ const NetlifyForm = ({children, formName}) => {
     )
 }
 
-let isHydrating = true;
-
 export default function TestPage() {
 
-  let [isForm, setIsForm] = React.useState(!isHydrating);
+  let [isForm, setIsForm] = React.useState(<div></div>);
   
   React.useEffect(() => {
-    isHydrating = false;
-    setIsForm(true);
-  }, []);
-
-  if (isForm) {
-    return (
-      <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
-        <h1>Welcome to Remix</h1>
-        <NetlifyForm formName="some-form">
+    const setForm = () => {
+      return(
+        <NetlifyForm action="/" formName="some-form">
           <textarea name="message"  />
           <button type="submit">Submit</button>
         </NetlifyForm>
+      )
+    }
+
+    setForm();
+    setIsForm(setForm);
+  }, []);
+  // console.log(isForm)
+    return (
+      <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
+        <h1>Welcome to Remix</h1>
+        <NetlifyForm action="/some-form" formName="some-form">
+          <textarea name="message"  />
+          <button type="submit">Submit</button>
+        </NetlifyForm>
+        {isForm && isForm}
       </div>
     );
-  } else {
-    return <div />;
-  }
 }
