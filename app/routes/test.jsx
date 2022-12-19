@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
-
+import * as React from "react";
 
 const NetlifyForm = ({ action, children, formName}) => {
     return (
@@ -18,10 +18,23 @@ const NetlifyForm = ({ action, children, formName}) => {
 }
 
 export default function TestPage() {
+
+  const [isForm, setIsForm] = React.useState(false);
+  
+  console.log(isForm)
+  React.useEffect(() => {
+    setIsForm(true);
+  }, []);
+  if (!isForm) {
+    return null;
+  }
+
+  console.log(isForm)
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
       <h1>Welcome to Remix</h1>
-      <NetlifyForm action="/some-form" formName="some-form">
+      <NetlifyForm suppressHydrationWarning={true} formName="some-form">
         <textarea name="message"  />
         <button type="submit">Submit</button>
       </NetlifyForm>
