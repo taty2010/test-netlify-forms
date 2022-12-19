@@ -2,9 +2,9 @@ import { redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
 import * as React from "react";
 
-const NetlifyForm = ({ action, children, formName}) => {
+const NetlifyForm = ({children, formName}) => {
     return (
-        <form action={action} method="post">
+        <form method="post">
             <input type="hidden" name="form-name" value={formName} />
             {/* Replace with hidden style class */}
             <p style={{display: "none"}}>
@@ -21,15 +21,12 @@ export default function TestPage() {
 
   const [isForm, setIsForm] = React.useState(false);
   
-  console.log(isForm)
   React.useEffect(() => {
     setIsForm(true);
   }, []);
   if (!isForm) {
     return null;
   }
-
-  console.log(isForm)
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.4" }}>
