@@ -4,7 +4,7 @@ import * as React from "react";
 
 const NetlifyForm = ({children, formName}) => {
     return (
-        <form method="post">
+        <form method="post" data-netlify netlify-honeypot="bot-field">
             <input type="hidden" name="form-name" value={formName} />
             {/* Replace with hidden style class */}
             <p style={{display: "none"}}>
