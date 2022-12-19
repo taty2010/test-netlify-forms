@@ -4,7 +4,7 @@ import * as React from "react";
 
 const NetlifyForm = ({children, formName, action}) => {
     return (
-        <form action={action} method="post"  data-netlify netlify-honeypot="bot-field">
+        <form action={action} method="POST" data-netlify netlify-honeypot="bot-field">
             <input type="hidden" name="form-name" value={formName}/>
             {/* Replace with hidden style class */}
             <p style={{display: "none"}}>
@@ -24,7 +24,7 @@ export default function TestPage() {
   React.useEffect(() => {
     const setForm = () => {
       return(
-        <NetlifyForm action="/" formName="some-form">
+        <NetlifyForm action="/success" formName="some-form">
           <textarea name="message"  />
           <button type="submit">Submit</button>
         </NetlifyForm>
