@@ -19,7 +19,7 @@ export const handleSubmit = (event, htmlForm, formRedirect) => {
   
   export const NetlifyForm = ({children, formName, action}) => {
       return (
-          <form action={action} method="POST" data-netlify="false" onSubmit={ e => handleSubmit(e, '/some-form.html', '/success')}>
+          <form action={action} method="POST" name="test-form-name" data-netlify="false" onSubmit={ e => handleSubmit(e, '/some-form.html', '/success')}>
               <input type="hidden" name="form-name" value={formName}/>
               {/* Replace with hidden style class */}
               <p style={{display: "none"}}>
