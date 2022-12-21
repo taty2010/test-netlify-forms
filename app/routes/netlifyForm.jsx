@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 export const handleSubmit = (event, htmlForm, formRedirect) => {
     event.preventDefault();
   
@@ -18,16 +20,27 @@ export const handleSubmit = (event, htmlForm, formRedirect) => {
   };
   
   export const NetlifyForm = ({children, formName, action}) => {
-      return (
-          <form action={action} method="POST" name="test-form-name" data-netlify="true" onSubmit={ e => handleSubmit(e, '/some-form.html', '/success')}>
-              <input type="hidden" name="form-name" value={formName}/>
-              {/* Replace with hidden style class */}
-              <p style={{display: "none"}}>
-                  <label>
-                  Don’t fill this out if you’re human: <input name="bot-field" />
-                  </label>
-              </p>
-              {children}
-          </form>
+
+      let [form, setForm] = useState(false);
+      let ntlForm = (
+        <form action={action} id="netlify-form" method="POST" name="test-form-name" data-netlify="true" onSubmit={ e => handleSubmit(e, '/some-form.html', '/success')}>
+          <input type="hidden" name="form-name" value={formName}/>
+          {/* Replace with hidden style class */}
+          <p style={{display: "none"}}>
+              <label>
+              Don’t fill this out if you’re human: <input name="bot-field" />
+              </label>
+          </p>
+          {children}
+        </form>
       )
+      useEffect(() => {
+          setForm(true);
+      }, []);
+      if(!form){
+          return <>{ntlForm}</>
+      }else{
+        document.getElementById('netlify-form').setAttribute('netlify-form', 'true');
+        return <>{ntlForm}</>
+      }
   }
